@@ -14,5 +14,25 @@ Route::get('/home', [
     'index'
 ])->name('home')->middleware('auth');
 
-Route::post('/create', [CompanyController::class, 'create']);
-Route::post('/read', [CompanyController::class, 'read']);
+
+
+
+Route::prefix('company')->group(function () {
+
+  
+
+    Route::get('/', function () {
+        return view('company.create');
+    })->name('company.index');
+
+    Route::post('/create', [CompanyController::class, 'create'])
+        ->name('company.create');
+    Route::get('/read', [CompanyController::class, 'read'])
+        ->name('company.read');
+          Route::delete('/destroy', [CompanyController::class, 'delete'])
+        ->name('company.delete');
+        
+
+
+
+});
