@@ -10,7 +10,7 @@
 
     <div class="card-body">
 
-        <form action="{{ route('employee.create') }}" method="POST">
+        <form action="{{ route('employee.update',['id' => $data->id]) }}" method="POST">
 
             @csrf
 
@@ -20,7 +20,8 @@
                 <input type="text"
                        name="first_name"
                        class="form-control"
-                       placeholder="Enter Employee First name">
+                       placeholder="Enter Employee First name"
+                       value={{ $data->first_name }}>
             </div>
 
 
@@ -30,7 +31,8 @@
                 <input type="text"
                        name="last_name"
                        class="form-control"
-                       placeholder="Enter Employee Last Name">
+                       placeholder="Enter Employee Last Name"
+                       value={{ $data->last_name }}>
             </div>
 
 
@@ -40,7 +42,8 @@
                 <input type="email"
                        name="email"
                        class="form-control"
-                       placeholder="Enter Email">
+                       placeholder="Enter Email"
+                       value={{ $data->email }}>
             </div>
            
             
@@ -50,7 +53,9 @@
                 <input type="text"
                        name="phone"
                        class="form-control"
-                       placeholder="Enter Phone Number">
+                       placeholder="Enter Phone Number"
+                       value={{ $data->phone }}>
+
             </div>
              <div class="mb-3">
                 <label class="form-label">Gender</label>
@@ -58,25 +63,28 @@
                 <input type="text"
                        name="gender"
                        class="form-control"
-                       placeholder="Enter  Gender">
+                       placeholder="Enter  Gender"
+                       value={{ $data->gender }}>
             </div>
             <div class="mb-3">
     <label class="form-label">Company</label>
-
     <select name="company_id" class="form-select">
-        <option value="">Select Company</option>
+    <option value="">Select Company</option>
 
-        @foreach($companies as $company)
-            <option value="{{ $company->id }}">
-                {{ $company->name }}
-            </option>
-        @endforeach
-    </select>
+    @foreach($company as $companies)
+        <option value="{{ $companies->id }}"
+            {{ $data->company_id == $companies->id ? 'selected' : '' }}>
+            {{ $companies->name }}
+        </option>
+    @endforeach
+</select>
+
+    
 </div>
 
 
             <button type="submit" class="btn btn-dark">
-                Create Employee
+                Update Employee
             </button>
 
             <a href="{{ route('employee.read') }}"

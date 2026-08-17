@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('gender')->nullable();
           
              $table->foreignId('company_id')->constrained('companies')->softDeletes();
+             $table->timestamps();
             $table->softDeletes();
             
         });

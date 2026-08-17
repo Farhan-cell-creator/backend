@@ -7,7 +7,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Companies</h4>
 
-        <a href="{{ route('company.create') }}" class="btn btn-dark">
+        <a href="{{ route('company.index') }}" class="btn btn-dark">
             Create Company
         </a>
     </div>
@@ -58,10 +58,10 @@
                             <td>
 
                                
-                                <a href="{{ route('company.read', $company->id) }}"
-                                   class="btn btn-sm btn-primary">
-                                    Edit
-                                </a>
+                              <a href="{{ route('company.edit', ['id' => $company->id]) }}"
+   class="btn btn-sm btn-primary">
+    Edit
+</a>
 
                                 
 <form action="{{ route('company.delete') }}"

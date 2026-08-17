@@ -92,7 +92,7 @@
 
 
                                     <form id="logout-form"
-                                          action="{{ route('logout') }}"
+                                          action="/logout"
                                           method="POST"
                                           class="d-none">
 
@@ -138,7 +138,7 @@
                         </a>
 
 
-                        <a href="{{ route('company.index') }}"
+                        <a href="{{ route('employee.index') }}"
                            class="list-group-item list-group-item-action bg-dark text-white">
 
                             Employee

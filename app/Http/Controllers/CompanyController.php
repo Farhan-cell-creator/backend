@@ -34,6 +34,15 @@ class CompanyController extends Controller
             ->route('company.index')
             ->with('success', 'Record created successfully');
     }
+    public function edit($id)
+{
+    $result=Company::where('id',$id)->firstOrfail();
+    return view('company.update',[
+         'message'=>"Read data successfully",
+       'result'=>$result
+       ]);
+
+}
 
     public function update(Request $request,$id)
     {
@@ -46,15 +55,12 @@ class CompanyController extends Controller
 
         if($check)
             {
-                return response()->json([
-                    'message'=>'Update Record Successfully',
-                    'data'=>$validate
-                ],404);
+                return redirect()->route('company.read');
             }
           return response()->json([
                     'message'=>' Record  not Update '
         
-                ]);  
+                ],404);  
     }
    public function delete(Request $request)
 {
