@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Validation\Rule;
-use Illuminate\Http\Request;
+
 use App\Models\Company;
 use App\Models\Employee;
+use App\Mail\EmployeeCreate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends Controller
 {
@@ -14,19 +17,61 @@ class EmployeeController extends Controller
         $companies=Company::all();
         return view('employee.create',compact('companies'));
     }
-    public function read()
-    {
-       $data= Employee::all();
-       return view('employee.view',[
-        'message'=>' read data successfully',
-        'data'=> $data
-       ]);
-    //    return response()->json([
-    //    'message'=>"Read data successfully",
-    //    'data'=>$data
+    // public function read()
+    // {
+    //    $data= Employee::all();
+    //    return view('employee.view',[
+    //     'message'=>' read data successfully',
+    //     'data'=> $data
     //    ]);
+    // //    return response()->json([
+    // //    'message'=>"Read data successfully",
+    // //    'data'=>$data
+    // //    ]);
 
+    // }
+    
+
+
+public function read(Request $request)
+{
+    if ($request->ajax()) {
+
+        $data = Employee::query();
+
+        return DataTables::of($data)
+         ->addColumn('action', function ($company) {
+
+                return '
+                    <a href="' . route('employee.edit', ['id' => $company->id]) . '"
+                       class="btn btn-sm btn-primary">
+                        Edit
+                    </a>
+
+                    <form action="' . route('employee.delete') . '"
+                          method="POST"
+                          class="d-inline">
+
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+
+                        <input type="hidden"
+                               name="id"
+                               value="' . $company->id . '">
+
+                        <button type="submit"
+                                class="btn btn-sm btn-danger"
+                                onclick="return confirm(\'Are you sure?\')">
+                            Delete
+                        </button>
+                    </form>
+                ';
+            })
+            ->make(true);
     }
+
+    return view('employee.view');
+}
     public function create (Request $request)
     {
         
@@ -41,6 +86,9 @@ class EmployeeController extends Controller
         $data=Employee::create($validate);
         if($data)
             {
+                $result=Company::where('id',$validate['company_id'])->firstOrFail();
+Mail::to($result->email)
+    ->send(new EmployeeCreate($data));
                   return redirect()->route('employee.index');
                 //   return response()->json([
                 //     'message'=>'create employee successfully',

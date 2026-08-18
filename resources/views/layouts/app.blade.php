@@ -2,24 +2,41 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+
     <meta charset="utf-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+  
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://fonts.bunny.net/css?family=Nunito"
+          rel="stylesheet">
+
+
+   
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+
+    {{-- DataTables CSS --}}
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+
 </head>
+
 
 <body>
 
     <div id="app">
 
-        
+
+        {{-- Navbar --}}
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
 
             <div class="container">
@@ -27,6 +44,7 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+
 
                 <button class="navbar-toggler"
                         type="button"
@@ -38,7 +56,9 @@
                 </button>
 
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse"
+                     id="navbarSupportedContent">
+
 
                     <ul class="navbar-nav me-auto">
                     </ul>
@@ -49,20 +69,36 @@
                         @guest
 
                             @if (Route::has('login'))
+
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">
+
+                                    <a class="nav-link"
+                                       href="{{ route('login') }}">
+
                                         {{ __('Login') }}
+
                                     </a>
+
                                 </li>
+
                             @endif
 
+
                             @if (Route::has('register'))
+
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">
+
+                                    <a class="nav-link"
+                                       href="{{ route('register') }}">
+
                                         {{ __('Register') }}
+
                                     </a>
+
                                 </li>
+
                             @endif
+
 
                         @else
 
@@ -115,20 +151,25 @@
         </nav>
 
 
-       
+
+        {{-- Main Content --}}
         <div class="container-fluid">
 
             <div class="row">
 
-                
+
+                {{-- Sidebar --}}
                 <div class="col-md-3 col-lg-2 bg-dark text-white min-vh-100 p-0">
 
                     <div class="p-3">
+
                         <h4>Admin Menu</h4>
+
                     </div>
 
 
                     <div class="list-group list-group-flush">
+
 
                         <a href="{{ route('company.index') }}"
                            class="list-group-item list-group-item-action bg-dark text-white">
@@ -145,23 +186,46 @@
 
                         </a>
 
+                         <a href="{{ route('analytics') }}"
+                           class="list-group-item list-group-item-action bg-dark text-white">
+
+                            Analytics
+
+                        </a>
+
+
                     </div>
 
                 </div>
 
 
-              
+
+               
                 <div class="col-md-9 col-lg-10 p-4">
 
                     @yield('content')
 
                 </div>
 
+
             </div>
 
         </div>
 
     </div>
+
+
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
+   
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
+
+   
+    @stack('scripts')
+
 
 </body>
 

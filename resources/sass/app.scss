@@ -6,3 +6,10 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+/* DataTables Entries Dropdown */
+.dt-length {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
