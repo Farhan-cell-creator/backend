@@ -61,21 +61,9 @@ $(document).ready(function () {
         serverSide: true,
 
         pageLength: 6,
-        lengthMenu: [5, 10, 15, 20],
+        lengthMenu: [5, 10, 15, 100],
 
         ajax: "{{ route('company.read') }}",
-//         ajax: {
-//     url: "{{ route('company.read') }}",
-//     type: "GET",
-//     dataSrc: function (json) {
-//         console.log("DataTable Response:", json);
-//         return json.data;
-//     },
-//     error: function (xhr) {
-//         console.log("DataTable Error:", xhr.status);
-//         console.log(xhr.responseText);
-//     }
-// },
 
         columns: [
 
