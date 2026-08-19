@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\EmployeesController;
+use App\Http\Controllers\UsersController;
 
 
 Auth::routes();
@@ -48,6 +50,24 @@ Route::get('/edit/{id}',[EmployeeController::class,'edit'])->name('employee.edit
 Route::post('/update/{id}',[EmployeeController::class,'update'])->name('employee.update');
 });
 Route::get('/analytics',[AnalyticsController::class,'gender'])->name('analytics');
+
+
+
+// task 6 Api Endpoint
+Route::prefix('user')->group(function () {
+    Route::post('/register',[UsersController::class,'register']);
+    Route::post('/login',[UsersController::class,'login']);
+   
+});
+
+Route::prefix('employees')->group(function () {
+    Route::get('/reads',[EmployeesController::class,'get']);
+    Route::get('/read',[EmployeesController::class,'index']);
+    Route::get('/delete',[EmployeesController::class,'delete']);
+});
+
+
+
 
 
 
