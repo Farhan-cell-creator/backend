@@ -5,6 +5,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AnalyticsController;
 
+
 Auth::routes();
 
 Route::get('/', function () {
@@ -47,10 +48,6 @@ Route::get('/edit/{id}',[EmployeeController::class,'edit'])->name('employee.edit
 Route::post('/update/{id}',[EmployeeController::class,'update'])->name('employee.update');
 });
 Route::get('/analytics',[AnalyticsController::class,'gender'])->name('analytics');
-Route::get('/test-company', function () {
-    return response()->json([
-        'status' => 'ok',
-        'message' => 'Laravel is working'
-    ]);
-});
+
+
 

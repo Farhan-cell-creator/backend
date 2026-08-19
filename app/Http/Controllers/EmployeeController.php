@@ -8,6 +8,7 @@ use App\Mail\EmployeeCreate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
@@ -17,19 +18,7 @@ class EmployeeController extends Controller
         $companies=Company::all();
         return view('employee.create',compact('companies'));
     }
-    // public function read()
-    // {
-    //    $data= Employee::all();
-    //    return view('employee.view',[
-    //     'message'=>' read data successfully',
-    //     'data'=> $data
-    //    ]);
-    // //    return response()->json([
-    // //    'message'=>"Read data successfully",
-    // //    'data'=>$data
-    // //    ]);
-
-    // }
+   
     
 
 
@@ -90,10 +79,7 @@ public function read(Request $request)
 Mail::to($result->email)
     ->send(new EmployeeCreate($data));
                   return redirect()->route('employee.index');
-                //   return response()->json([
-                //     'message'=>'create employee successfully',
-                //     'data'=>$data
-                //   ]);
+               
 
 
             }

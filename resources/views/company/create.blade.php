@@ -10,7 +10,9 @@
 
     <div class="card-body">
 
-        <form action="{{ route('company.create') }}" method="POST">
+        <form action="{{ route('company.create') }}"
+              method="POST"
+              enctype="multipart/form-data">
 
             @csrf
 
@@ -20,7 +22,8 @@
                 <input type="text"
                        name="name"
                        class="form-control"
-                       placeholder="Enter company name">
+                       placeholder="Enter company name"
+                       required>
             </div>
 
 
@@ -30,17 +33,19 @@
                 <input type="email"
                        name="email"
                        class="form-control"
-                       placeholder="Enter company email">
+                       placeholder="Enter company email"
+                       required>
             </div>
 
 
             <div class="mb-3">
-                <label class="form-label">Logo URL</label>
+                <label class="form-label">Company Logo</label>
 
-                <input type="url"
+                <input type="file"
                        name="logo"
                        class="form-control"
-                       placeholder="Enter logo URL">
+                       accept="image/*"
+                       required>
             </div>
 
 

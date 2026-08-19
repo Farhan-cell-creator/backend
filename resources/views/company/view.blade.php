@@ -61,9 +61,25 @@ $(document).ready(function () {
         serverSide: true,
 
         pageLength: 6,
-        lengthMenu: [5, 10, 15, 100],
+        // lengthMenu: [5, 10, 15, 100],
 
-        ajax: "{{ route('company.read') }}",
+        // ajax: "{{ route('company.read') }}",
+        ajax: {
+            url: "{{ route('company.read') }}",
+            type: "GET",
+            dataSrc: function (json) {
+                console.log('Raw response:', json);
+                console.log('Data array:', json.data);
+                return json.data; 
+            },
+            error: function (xhr, error, thrown) {
+                console.log('AJAX failed. Status:', xhr.status);
+                console.log('Error thrown:', thrown);
+                console.log('Raw server response:', xhr.responseText);
+            }
+        },
+
+       
 
         columns: [
 

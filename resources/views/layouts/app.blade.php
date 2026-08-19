@@ -24,7 +24,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
 
-    {{-- DataTables CSS --}}
+   
     <link rel="stylesheet"
           href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
 
