@@ -25,6 +25,43 @@
             </div>
 
         @endif
+         <div class="row mb-4">
+
+            <div class="col-md-3">
+                <label for="from_date" class="form-label">
+                    From Date
+                </label>
+
+                <input type="date"
+                       id="from_date"
+                       class="form-control">
+            </div>
+
+
+            <div class="col-md-3">
+                <label for="to_date" class="form-label">
+                    To Date
+                </label>
+
+                <input type="date"
+                       id="to_date"
+                       class="form-control">
+            </div>
+             <div class="col-md-3 d-flex align-items-end">
+
+                <button type="button"
+                        id="filter-date"
+                        class="btn btn-primary me-2">
+                    Filter
+                </button>
+
+                <button type="button"
+                        id="reset-date"
+                        class="btn btn-secondary">
+                    Reset
+                </button>
+
+            </div>
 
 
         <div class="table-responsive">
@@ -63,10 +100,9 @@
    
 
 <script>
-
 $(document).ready(function () {
 
-    $('#employee-table').DataTable({
+    let table = $('#employee-table').DataTable({
 
         processing: true,
 
@@ -74,25 +110,37 @@ $(document).ready(function () {
 
         pageLength: 20,
 
-        // lengthMenu: [5, 10, 15, 20],
-
-        // ajax: "{{ route('employee.read') }}",
         ajax: {
+
             url: "{{ route('employee.read') }}",
+
             type: "GET",
+
+            data: function (d) {
+
+                d.from_date = $('#from_date').val();
+                d.to_date = $('#to_date').val();
+
+            },
+
             dataSrc: function (json) {
+
                 console.log('Raw response:', json);
                 console.log('Data array:', json.data);
-                return json.data; 
+
+                return json.data;
+
             },
+
             error: function (xhr, error, thrown) {
+
                 console.log('AJAX failed. Status:', xhr.status);
                 console.log('Error thrown:', thrown);
                 console.log('Raw server response:', xhr.responseText);
-            }
-        },
 
-        
+            }
+
+        },
 
         columns: [
 
@@ -110,7 +158,8 @@ $(document).ready(function () {
                 data: 'last_name',
                 name: 'last_name'
             },
-             {
+
+            {
                 data: 'gender',
                 name: 'gender'
             },
@@ -133,6 +182,25 @@ $(document).ready(function () {
             }
 
         ]
+
+    });
+
+
+   
+    $('#filter-date').click(function () {
+
+        table.ajax.reload();
+
+    });
+
+
+  
+    $('#reset-date').click(function () {
+
+        $('#from_date').val('');
+        $('#to_date').val('');
+
+        table.ajax.reload();
 
     });
 

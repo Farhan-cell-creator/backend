@@ -27,6 +27,13 @@ public function read(Request $request)
     if ($request->ajax()) {
 
         $data = Employee::query();
+         if ($request->filled('from_date')) {
+            $data->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $data->whereDate('created_at', '<=', $request->to_date);
+        }
 
         return DataTables::of($data)
          ->addColumn('action', function ($company) {
