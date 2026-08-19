@@ -22,7 +22,7 @@ Route::get('/home', [
 
 
 
-Route::prefix('company')->group(function () {
+Route::prefix('company')->middleware('auth')->group(function () {
     Route::get('/', function () {
         return view('company.create');
     })->name('company.index');
@@ -40,7 +40,7 @@ Route::prefix('company')->group(function () {
         });
 
 
-Route::prefix('employee')->group(function (){
+Route::prefix('employee')->middleware('auth')->group(function (){
      Route::get('/',[EmployeeController::class,'index'])->name('employee.index');
 
  Route::post('/create',[EmployeeController::class,'create'])->name('employee.create');
@@ -49,7 +49,7 @@ Route::prefix('employee')->group(function (){
 Route::get('/edit/{id}',[EmployeeController::class,'edit'])->name('employee.edit');
 Route::post('/update/{id}',[EmployeeController::class,'update'])->name('employee.update');
 });
-Route::get('/analytics',[AnalyticsController::class,'gender'])->name('analytics');
+Route::get('/analytics',[AnalyticsController::class,'gender'])->middleware('auth')->name('analytics');
 
 
 
