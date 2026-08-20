@@ -10,6 +10,7 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
+        // Add Dummy Data in User Table
         User::create([
             'name' => 'Administrator',
             'email' => 'admin@gmail.com',

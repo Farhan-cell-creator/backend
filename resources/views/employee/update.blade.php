@@ -1,76 +1,64 @@
 @extends('layouts.app')
-
 @section('content')
-
 <div class="card">
-
     <div class="card-header">
         <h4 class="mb-0">Employee Create</h4>
     </div>
-
+    {{-- Employee Form --}}
     <div class="card-body">
-
         <form action="{{ route('employee.update',['id' => $data->id]) }}" method="POST">
-
             @csrf
-
+    {{-- Employee First Name --}}
             <div class="mb-3">
                 <label class="form-label">First Name</label>
-
                 <input type="text"
                        name="first_name"
                        class="form-control"
                        placeholder="Enter Employee First name"
                        value={{ $data->first_name }}>
             </div>
-
-
+    {{-- Employee Last Name --}}
             <div class="mb-3">
                 <label class="form-label">Last Name</label>
-
                 <input type="text"
                        name="last_name"
                        class="form-control"
                        placeholder="Enter Employee Last Name"
                        value={{ $data->last_name }}>
             </div>
-
-
+    {{-- Employee Email --}}
             <div class="mb-3">
                 <label class="form-label">Email</label>
-
                 <input type="email"
                        name="email"
                        class="form-control"
                        placeholder="Enter Email"
                        value={{ $data->email }}>
             </div>
-           
-            
+    {{-- Employee Phone No --}}
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-
                 <input type="text"
                        name="phone"
                        class="form-control"
                        placeholder="Enter Phone Number"
                        value={{ $data->phone }}>
-
             </div>
+    {{-- Employee Gender --}}
              <div class="mb-3">
                 <label class="form-label">Gender</label>
-
                 <input type="text"
                        name="gender"
                        class="form-control"
                        placeholder="Enter  Gender"
                        value={{ $data->gender }}>
             </div>
+        {{-- Select Company --}}
             <div class="mb-3">
     <label class="form-label">Company</label>
     <select name="company_id" class="form-select">
     <option value="">Select Company</option>
-
+    {{-- Compant List --}}
     @foreach($company as $companies)
         <option value="{{ $companies->id }}"
             {{ $data->company_id == $companies->id ? 'selected' : '' }}>
@@ -78,26 +66,17 @@
         </option>
     @endforeach
 </select>
-
-    
 </div>
-
-
+        {{--Update  Employee Button--}}
             <button type="submit" class="btn btn-dark">
                 Update Employee
             </button>
-
             <a href="{{ route('employee.read') }}"
+            {{--View  Employee --}}
                class="btn btn-secondary">
-
                 View Employee
-
             </a>
-
         </form>
-
     </div>
-
 </div>
-
 @endsection
