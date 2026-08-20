@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-Route::post('/read', [CompanyController::class, 'read']);
-
 // Task 6 Api Endpoint
 // User Api EndPoint
 Route::prefix('user')->group(function () {
@@ -18,8 +16,8 @@ Route::prefix('user')->group(function () {
 
 });
 // Employee Api EndPoint
-Route::prefix('employees')->group(function () {
-    Route::get('/reads', [EmployeeController::class, 'get']);
-    Route::get('/read', [EmployeeController::class, 'index']);
-    Route::get('/delete', [EmployeeController::class, 'delete']);
+Route::prefix('employee')->group(function () {
+    Route::get('/all', [EmployeeController::class, 'getAllEmployee']);
+    Route::get('/id', [EmployeeController::class, 'getEmployeeById']);
+    Route::delete('/delete', [EmployeeController::class, 'deleteEmployeeById']);
 });

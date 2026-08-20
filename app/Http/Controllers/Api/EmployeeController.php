@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class EmployeesController extends Controller
 {
     //
-    public function get()
+    public function getAllEmployee()
     {
         $data = Employee::all();
 
@@ -19,7 +19,7 @@ class EmployeesController extends Controller
         ], 200);
     }
 
-    public function index(Request $request)
+    public function getEmployeeById(Request $request)
     {
         $id = $request->query('id');
         $data = Employee::where('id', $id)->first();
@@ -38,7 +38,7 @@ class EmployeesController extends Controller
         ], 404);
     }
 
-    public function delete(Request $request)
+    public function deleteEmployeeById(Request $request)
     {
         $id = $request->query('id');
         $data = Employee::where('id', $id)->delete();
