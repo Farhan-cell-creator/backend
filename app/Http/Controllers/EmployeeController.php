@@ -16,17 +16,35 @@ class EmployeeController extends Controller
     public function index()
     {
         // Fetch Company Data
-        $companies = Company::all();
+         $user=auth()->user();
+         if($user->hasRole('company_user'))
+            {
+                $companies = Company::where('id',$user->company_id)->get();
+            }
+             if($user->hasRole('super_admin'))
+            {
+               $companies = Company::all();
+            }
+        
 
         return view('employee.create', compact('companies'));
     }
 
     public function read(Request $request)
     {
+        
         // Handle Ajax request
         if ($request->ajax()) {
+            $user = auth()->user();
 
             $data = Employee::query();
+            // Company user -> only own company employees
+        if ($user->hasRole('company_user')) {
+
+            $data->where('company_id', $user->company_id);
+        }
+
+    
             // Filter  employee  Starting Date
             if ($request->filled('from_date')) {
                 $data->whereDate('created_at', '>=', $request->from_date);

@@ -5,6 +5,7 @@
         <h4 class="mb-0">Company Update</h4>
     </div>
     {{--Update Company form --}}
+  
     <div class="card-body">
         <form action="{{ route('company.update', ['id' => $result->id]) }}"
               method="POST"
@@ -33,6 +34,23 @@
                 @error('email')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
+            </div>
+            {{-- Password --}}
+             <div class="mb-3">
+                <label class="form-label">Password</label>
+               <input type="password"
+           name="password"
+           class="form-control"
+           placeholder="Enter new password">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">User Name</label>
+                <input type="text"
+                  name="user_name"
+                  class="form-control"
+                  placeholder="Enter User Name"
+                   value="{{ old('user_name', $user->name) }}"
+                  required>
             </div>
              {{-- View Company Logo --}}
             <div class="mb-3">

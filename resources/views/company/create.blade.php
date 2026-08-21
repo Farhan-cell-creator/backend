@@ -28,6 +28,24 @@
                        placeholder="Enter company email"
                        required>
             </div>
+             {{-- Password --}}
+             <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Enter User Password"
+                  required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">User Name</label>
+                <input type="text"
+                  name="user_name"
+                  class="form-control"
+                  placeholder="Enter User Name"
+                  required>
+            </div>
+           
               {{-- Company Logo --}}
             <div class="mb-3">
                 <label class="form-label">Company Logo</label>

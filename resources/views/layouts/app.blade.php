@@ -84,23 +84,44 @@
             <div class="row">
                 {{-- Sidebar --}}
                 <div class="col-md-3 col-lg-2 bg-dark text-white min-vh-100 p-0">
-                    <div class="p-3">
+                   
+
+    @if(auth()->user()->hasRole('super_admin'))
+     <div class="p-3">
                         <h4>Admin Menu</h4>
-                    </div>
-                    <div class="list-group list-group-flush">
-                        <a href="{{ route('company.index') }}"
-                           class="list-group-item list-group-item-action bg-dark text-white">
-                            Company
-                        </a>
-                        <a href="{{ route('employee.index') }}"
-                           class="list-group-item list-group-item-action bg-dark text-white">
-                            Employee
-                        </a>
-                         <a href="{{ route('analytics') }}"
-                           class="list-group-item list-group-item-action bg-dark text-white">
-                            Analytics
-                        </a>
-                    </div>
+                    </div><div class="list-group list-group-flush">
+
+        <a href="{{ route('company.index') }}"
+           class="list-group-item list-group-item-action bg-dark text-white">
+            Company
+        </a>
+
+        <a href="{{ route('employee.index') }}"
+           class="list-group-item list-group-item-action bg-dark text-white">
+            Employee
+        </a>
+
+        <a href="{{ route('analytics') }}"
+           class="list-group-item list-group-item-action bg-dark text-white">
+            Analytics
+        </a>
+
+    @elseif(auth()->user()->hasRole('company_user'))
+         <div class="p-3">
+                        <h4>Company User Menu</h4>
+                    </div><div class="list-group list-group-flush">
+        <a href="{{ route('company_user') }}"
+           class="list-group-item list-group-item-action bg-dark text-white">
+            Company Detail
+        </a>
+        <a href="{{ route('employee.index') }}"
+           class="list-group-item list-group-item-action bg-dark text-white">
+            Employee
+        </a>
+
+    @endif
+
+</div>
                 </div>
                 <div class="col-md-9 col-lg-10 p-4">
                     @yield('content')

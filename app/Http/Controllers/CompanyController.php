@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
 {
@@ -80,18 +82,20 @@ class CompanyController extends Controller
         // Validate Input
         $validate = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', 'unique:companies,email'],
+            'password' => ['required', 'string', 'min:5', 'max:12'],
+            'user_name' => ['required', 'string', 'max:20'],
             'logo' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+
         ]);
 
         $file = $request->file('logo');
 
         // Create a File Unique Name
         $fileName = 'company-logos/'.uniqid().'.'.$file->getClientOriginalExtension();
-       
+
         $bucket = env('BUCKET');
 
-       
         $url = "https://firebasestorage.googleapis.com/v0/b/{$bucket}/o";
         // Send File to Firebase
         $response = Http::withHeaders([
@@ -113,7 +117,20 @@ class CompanyController extends Controller
 
         $validate['logo'] = $logoUrl;
         // Create Company
-        Company::create($validate);
+
+        $company = Company::create([
+            'name' => $validate['name'],
+            'email' => $validate['email'],
+            'logo' => $validate['logo'],
+        ]);
+        $user = User::create([
+            'name' => $validate['user_name'],
+            'email' => $validate['email'],
+            'password' => $validate['password'],
+            'company_id' => $company->id,
+
+        ]);
+        $user->assignRole('company_user');
 
         return redirect()
             ->route('company.index')
@@ -124,10 +141,12 @@ class CompanyController extends Controller
     {
         // Find Company by Id
         $result = Company::where('id', $id)->firstOrFail();
+        $user=User::where('company_id',$result->id)->first();
 
         return view('company.update', [
             'message' => 'Read data successfully',
             'result' => $result,
+             'user'=>$user,
         ]);
     }
 
@@ -137,6 +156,8 @@ class CompanyController extends Controller
         $validate = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email'],
+            'password' => ['nullable', 'string', 'min:5', 'max:12'],
+            'user_name' => ['required', 'string', 'max:20'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
         //    Find Company By Id
@@ -147,7 +168,11 @@ class CompanyController extends Controller
                 'message' => 'Record not found',
             ], 404);
         }
-
+        if ($request->filled('password')) {
+            $validate['password'] = Hash::make($request->password);
+        } else {
+            unset($validate['password']);
+        }
         //    Check Logo Field
         if ($request->hasFile('logo')) {
 
@@ -191,6 +216,24 @@ class CompanyController extends Controller
 
             unset($validate['logo']);
         }
+       $user= User::where('company_id',$company->id)->first();
+
+    if ($user) {
+
+        $user->name = $validate['user_name'];
+        $user->email=$validate['email'];
+
+        // Password only update when entered
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+    }
+
+    // Remove User fields before updating Company
+    unset($validate['user_name']);
+    unset($validate['password']);
 
         $company->update($validate);
 
@@ -204,9 +247,9 @@ class CompanyController extends Controller
         if (! $logoUrl) {
             return false;
         }
-        
+
         $bucket = env('BUCKET');
-       
+
         $prefix = "https://firebasestorage.googleapis.com/v0/b/{$bucket}/o/";
 
         if (! str_contains($logoUrl, $prefix)) {

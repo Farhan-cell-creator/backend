@@ -5,6 +5,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Company;
 
 // Auth Routes
 Auth::routes();
@@ -15,10 +16,17 @@ Route::get('/', function () {
 Route::get('/home', [
     HomeController::class,
     'index',
-])->name('home')->middleware('auth');
+])->name('home')->middleware(['auth','role:super_admin|company_user']);
+
+Route::get('/companyuser', function(){
+    $user=auth()->user();
+    $company=Company::where('id',$user->company_id)->first();
+
+    return view('company.companyDetail',compact('company'));
+})->name('company_user')->middleware(['auth','role:company_user']);
 
 // Company Routes
-Route::prefix('company')->middleware('auth')->group(function () {
+Route::prefix('company')->middleware(['auth','role:super_admin'])->group(function () {
     Route::get('/', function () {
         return view('company.create');
     })->name('company.index');
@@ -35,7 +43,7 @@ Route::prefix('company')->middleware('auth')->group(function () {
 });
 
 // Employee Routes
-Route::prefix('employee')->middleware('auth')->group(function () {
+Route::prefix('employee')->middleware(['auth','role:super_admin|company_user'])->group(function () {
     Route::get('/', [EmployeeController::class, 'index'])->name('employee.index');
     Route::post('/create', [EmployeeController::class, 'create'])->name('employee.create');
     Route::get('/read', [EmployeeController::class, 'read'])->name('employee.read');
@@ -44,4 +52,4 @@ Route::prefix('employee')->middleware('auth')->group(function () {
     Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
 });
 // Analytics Route
-Route::get('/analytics', [AnalyticsController::class, 'gender'])->middleware('auth')->name('analytics');
+Route::get('/analytics', [AnalyticsController::class, 'gender'])->middleware(['auth','role:super_admin'])->name('analytics');
