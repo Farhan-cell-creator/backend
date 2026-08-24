@@ -26,7 +26,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'company_id'
+        'company_id',
+        'employee_id'
     ];
 
     /**
@@ -56,4 +57,10 @@ class User extends Authenticatable
 {
     return $this->belongsTo(Company::class);
 }
+
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

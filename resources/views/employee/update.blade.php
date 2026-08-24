@@ -33,7 +33,17 @@
                        name="email"
                        class="form-control"
                        placeholder="Enter Email"
-                       value={{ $data->email }}>
+                       value={{  $user->email }}>
+            </div>
+              {{-- Password --}}
+             <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Enter User Password"
+                  required>
+                  
             </div>
     {{-- Employee Phone No --}}
             <div class="mb-3">

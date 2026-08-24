@@ -32,6 +32,15 @@
                        class="form-control"
                        placeholder="Enter Email">
             </div>
+             {{-- Password --}}
+             <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Enter User Password"
+                  required>
+            </div>
             {{-- Employee Phone no --}}
             <div class="mb-3">
                 <label class="form-label">Phone</label>
@@ -63,7 +72,7 @@
 </div>
 {{-- Create  Employee Button --}}
             <button type="submit" class="btn btn-dark">
-                Create Employee
+                Add Employee
             </button>
             {{--View  Employee --}}
             <a href="{{ route('employee.read') }}"

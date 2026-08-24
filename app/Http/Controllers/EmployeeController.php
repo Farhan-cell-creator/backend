@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\EmployeeCreate;
 use App\Models\Company;
 use App\Models\Employee;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
@@ -38,6 +40,7 @@ class EmployeeController extends Controller
             $user = auth()->user();
 
             $data = Employee::query();
+            
             // Company user -> only own company employees
         if ($user->hasRole('company_user')) {
 
@@ -88,31 +91,52 @@ class EmployeeController extends Controller
         return view('employee.view');
     }
 
-    public function create(Request $request)
-    {
-    //Validate Input  
-        $validate = $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'unique:employees,email'],
-            'phone' => ['nullable', 'string', 'max:11'],
-            'gender' => ['nullable', 'string'],
-            'company_id' => ['required', 'integer', 'exists:companies,id'],
-        ]);
-        // Create Employee
-        $data = Employee::create($validate);
-        if ($data) {
-            // Find Newly Created Employee Company
-            $result = Company::where('id', $validate['company_id'])->firstOrFail();
-            // Send Employee Creation Mail to Company
-            Mail::to($result->email)
-                ->send(new EmployeeCreate($data));
+  
 
-            return redirect()->route('employee.index');
+public function create(Request $request)
+{
+    $validate = $request->validate([
+        'first_name' => ['required', 'string', 'max:255'],
+        'last_name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'unique:users,email'],
+        'password' => ['required', 'string', 'min:5', 'max:12'],
+        'phone' => ['nullable', 'string', 'max:11'],
+        'gender' => ['nullable', 'string'],
+        'company_id' => ['required', 'integer', 'exists:companies,id'],
+    ]);
 
-        }
+    // Create Employee
+    $employee = Employee::create([
+        'first_name' => $validate['first_name'],
+        'last_name'  => $validate['last_name'],
+        'phone'      => $validate['phone'] ?? null,
+        'gender'     => $validate['gender'] ?? null,
+        'company_id' => $validate['company_id'],
+    ]);
 
-    }
+    // Create User for Employee
+    $user = User::create([
+        'name' => $validate['first_name'] . ' ' . $validate['last_name'],
+        'email' => $validate['email'],
+        'password' => Hash::make($validate['password']),
+        'employee_id' => $employee->id,
+        'company_id' => null,
+    ]);
+
+    // Assign employee role
+    $user->assignRole('employee');
+
+    // Find Company
+    $company = Company::findOrFail($validate['company_id']);
+
+    // Send email to company
+    Mail::to($company->email)
+        ->send(new EmployeeCreate($employee));
+
+    return redirect()
+        ->route('employee.index')
+        ->with('success', 'Employee created successfully');
+}
 
     public function edit($id)
     {
@@ -120,10 +144,13 @@ class EmployeeController extends Controller
         $result = Employee::where('id', $id)->firstOrfail();
         // Fetch Company for DropDown
         $company = Company::all();
+        $user=User::where('employee_id',$id)->firstOrfail();
+        
 
         return view('employee.update', [
             'data' => $result,
             'company' => $company,
+            'user'=>$user
         ]);
     }
 
@@ -131,15 +158,36 @@ class EmployeeController extends Controller
     {
         // Validate Input
         $validate = $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email',  Rule::unique('employees', 'email')->ignore($id)],
-            'phone' => ['nullable', 'string', 'max:11'],
-            'gender' => ['nullable', 'string'],
-            'company_id' => ['required', 'integer', 'exists:companies,id'],
+        'first_name' => ['required', 'string', 'max:255'],
+        'last_name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'unique:users,email'],
+        'password' => ['required', 'string', 'min:5', 'max:12'],
+        'phone' => ['nullable', 'string', 'max:11'],
+        'gender' => ['nullable', 'string'],
+        'company_id' => ['required', 'integer', 'exists:companies,id'],
         ]);
         // Find Employee by Id
-        $result = Employee::where('id', $id)->update($validate);
+        // Create Employee
+    $employee=Employee::where('id',$id)->firstOrFail();
+    $user=User::where('employee_id',$employee->id)->firstOrFail();
+   $result= $employee->update([
+        'first_name' => $validate['first_name'],
+        'last_name' => $validate['last_name'],
+        'phone' => $validate['phone'] ?? null,
+        'gender' => $validate['gender'] ?? null,
+        'company_id' => $validate['company_id'],
+    ]);
+     $userData = [
+        'name' => $validate['first_name'] . ' ' . $validate['last_name'],
+        'email' => $validate['email'],
+    ];
+    if (!empty($validate['password'])) {
+        $userData['password'] = Hash::make($validate['password']);
+    }
+
+    $user->update($userData);
+
+        
         if ($result) {
             return redirect()->route('employee.read');
         }

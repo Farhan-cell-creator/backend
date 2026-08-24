@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
@@ -297,5 +298,22 @@ class CompanyController extends Controller
         return redirect()
             ->route('company.read')
             ->with('message', 'Record not deleted successfully');
+    }
+    public function companyDetail()
+    {
+         $user = auth()->user();
+
+    if ($user->hasRole('company_user')) {
+
+        $company = Company::where('id', $user->company_id)->first();
+
+    } elseif ($user->hasRole('employee')) {
+
+        $employee = Employee::findOrFail($user->employee_id);
+
+        $company = Company::findOrFail($employee->company_id);
+    }
+
+    return view('company.companyDetail', compact('company'));
     }
 }

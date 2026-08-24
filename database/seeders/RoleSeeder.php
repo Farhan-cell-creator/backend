@@ -13,8 +13,23 @@ class RoleSeeder extends Seeder
             'name' => 'super_admin',
         ]);
 
-        Role::firstOrCreate([
+       $companyUser= Role::firstOrCreate([
             'name' => 'company_user',
+        ]);
+        $employee=Role::firstOrCreate([
+            'name' => 'employee',
+        ]);
+
+         $companyUser->givePermissionTo([
+            'task-create',
+            'task-read',
+            'task-update',
+            'task-delete',
+        ]);
+
+        // Employee
+        $employee->givePermissionTo([
+            'task-read',
         ]);
     }
 }

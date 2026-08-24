@@ -112,17 +112,46 @@
                     </div><div class="list-group list-group-flush">
         <a href="{{ route('company_user') }}"
            class="list-group-item list-group-item-action bg-dark text-white">
-            Company Detail
+                 Company Detail
         </a>
         <a href="{{ route('employee.index') }}"
            class="list-group-item list-group-item-action bg-dark text-white">
             Employee
         </a>
+        
+         <a href="{{ route('task.index') }}"
+           class="list-group-item list-group-item-action bg-dark text-white">
+            Task
+        </a>
+ {{-- EMPLOYEE --}}
+    @elseif(auth()->user()->hasRole('employee'))
 
+        <div class="p-3">
+            <h4>Employee Menu</h4>
+             <a href="{{ route('company_user') }}"
+           class="list-group-item list-group-item-action bg-dark text-white">
+            Company Detail
+        </a>
+        <div class="list-group list-group-flush">
+
+            @can('task-read')
+                <a href="{{ route('task.read') }}"
+                   class="list-group-item list-group-item-action bg-dark text-white">
+                   My Tasks
+                </a>
+            @endcan
+        </div>
+
+        
+
+        
     @endif
+    
 
 </div>
+
                 </div>
+                
                 <div class="col-md-9 col-lg-10 p-4">
                     @yield('content')
                 </div>

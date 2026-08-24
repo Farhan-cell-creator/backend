@@ -15,10 +15,14 @@ class Employee extends Model
         'gender',
         'company_id',
     ];
-    public function company()
-{
-    return $this->belongsTo(Company::class);
-}
 
- 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

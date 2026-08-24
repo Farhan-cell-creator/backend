@@ -5,7 +5,7 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Companies</h4>
         <a href="{{ route('company.index') }}" class="btn btn-dark">
-            Create Company
+            Add Company
         </a>
     </div>
     <div class="card-body">

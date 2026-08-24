@@ -57,7 +57,7 @@
             </div>
               {{--Company Button --}}
             <button type="submit" class="btn btn-dark">
-                Create Company
+                Add Company
             </button>
             {{-- View Company button --}}
             <a href="{{ route('company.read') }}"

@@ -16,10 +16,11 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email')->unique();
-            $table->string('phone')->nullable();
+            $table->string('phone', 11)->nullable()->unique();
             $table->string('gender')->nullable();
-            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            
             $table->timestamps();
             $table->softDeletes();
 
