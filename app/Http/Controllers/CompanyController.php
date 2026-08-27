@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use App\Models\User;
 use App\Models\Employee;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
 {
@@ -142,12 +142,12 @@ class CompanyController extends Controller
     {
         // Find Company by Id
         $result = Company::where('id', $id)->firstOrFail();
-        $user=User::where('company_id',$result->id)->first();
+        $user = User::where('company_id', $result->id)->first();
 
         return view('company.update', [
             'message' => 'Read data successfully',
             'result' => $result,
-             'user'=>$user,
+            'user' => $user,
         ]);
     }
 
@@ -217,24 +217,24 @@ class CompanyController extends Controller
 
             unset($validate['logo']);
         }
-       $user= User::where('company_id',$company->id)->first();
+        $user = User::where('company_id', $company->id)->first();
 
-    if ($user) {
+        if ($user) {
 
-        $user->name = $validate['user_name'];
-        $user->email=$validate['email'];
+            $user->name = $validate['user_name'];
+            $user->email = $validate['email'];
 
-        // Password only update when entered
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
+            // Password only update when entered
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+            }
+
+            $user->save();
         }
 
-        $user->save();
-    }
-
-    // Remove User fields before updating Company
-    unset($validate['user_name']);
-    unset($validate['password']);
+        // Remove User fields before updating Company
+        unset($validate['user_name']);
+        unset($validate['password']);
 
         $company->update($validate);
 
@@ -299,21 +299,23 @@ class CompanyController extends Controller
             ->route('company.read')
             ->with('message', 'Record not deleted successfully');
     }
+
     public function companyDetail()
     {
-         $user = auth()->user();
+        $user = auth()->user();
 
-    if ($user->hasRole('company_user')) {
+        if ($user->hasRole('company_user')) {
 
-        $company = Company::where('id', $user->company_id)->first();
+            $company = Company::where('id', $user->company_id)->first();
 
-    } elseif ($user->hasRole('employee')) {
+        } elseif ($user->hasRole('employee')) {
 
-        $employee = Employee::findOrFail($user->employee_id);
+            $employee = Employee::findOrFail($user->employee_id);
 
-        $company = Company::findOrFail($employee->company_id);
+            $company = Company::findOrFail($employee->company_id);
+        }
+
+        return view('company.companyDetail', compact('company'));
     }
 
-    return view('company.companyDetail', compact('company'));
-    }
 }

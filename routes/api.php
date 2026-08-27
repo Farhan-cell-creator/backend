@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Stevebauman\Location\Facades\Location;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\EagerController;
 
 use Jenssegers\Agent\Facades\Agent;
 
@@ -32,3 +33,4 @@ Route::prefix('employee')->group(function () {
 Route::get('/country',[CountryController::class,'getCountry']);
 Route::get('/visitor-details', [VisitorController::class, 'details']);
 Route::get('/pdf', [PdfController::class, 'generate']);
+Route::get('/company', [EagerController::class, 'show']);
