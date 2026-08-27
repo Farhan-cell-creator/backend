@@ -7,12 +7,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "jenssegers/agent": "^2.6",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
         "league/flysystem-aws-s3-v3": "3.0",
+        "spatie/browsershot": "^5.4",
+        "spatie/laravel-pdf": "^2.13",
         "spatie/laravel-permission": "^6.25",
+        "stevebauman/location": "^7.6",
         "yajra/laravel-datatables-oracle": "^12.7"
     },
     "require-dev": {
