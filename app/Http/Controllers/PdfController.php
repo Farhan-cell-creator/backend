@@ -7,7 +7,6 @@ use Spatie\LaravelPdf\Facades\Pdf;
 
 class PdfController extends Controller
 {
-    //
      public function generate()
     {
         $invoice = [
@@ -51,21 +50,16 @@ class PdfController extends Controller
 
             'discount' => 5000,
         ];
-
         // Calculate subtotal
         $subtotal = 0;
-
         foreach ($invoice['products'] as $product) {
             $subtotal += $product['quantity'] * $product['price'];
         }
-
         // Calculate total
         $total = $subtotal - $invoice['discount'];
-
         // Add calculated values
         $invoice['subtotal'] = $subtotal;
         $invoice['total'] = $total;
-
         return Pdf::view('pdf', [
             'invoice' => $invoice,
         ])->download('invoice.pdf');

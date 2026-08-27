@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
 use App\Models\Country;
+use Illuminate\Support\Facades\Http;
 
 class CountryController extends Controller
 {
@@ -12,11 +12,16 @@ class CountryController extends Controller
         $response = Http::withToken(
             env('REST_COUNTRIES_API_KEY')
         )->get('https://api.restcountries.com/countries/v5', [
+            // Limit is set to 100 because the free API plan
+            // allows us to fetch a maximum of 100 records per request.
             'limit' => 100,
+             // Offset tells the API how many records to skip
+            'offset'=>200
+           
         ]);
 
         // API request failed
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unable to fetch country data',
@@ -36,13 +41,8 @@ class CountryController extends Controller
                 'data' => $result,
             ], 404);
         }
-
-      
-
         foreach ($countries as $country) {
-
-           
-     // Language names comma separated
+            // Language names comma separated
             $languages = collect($country['languages'] ?? [])
                 ->pluck('name')
                 ->filter()
@@ -79,14 +79,13 @@ class CountryController extends Controller
                 'app_icon' => null,
             ]);
 
-          
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Countries successfully imported.',
             'api_total' => count($countries),
-            
+
             'database_total' => Country::count(),
         ]);
     }

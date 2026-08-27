@@ -12,20 +12,19 @@ class VisitorController extends Controller
      public function details(Request $request)
     {
        
-        $ip ='223.123.6.236';
+     // Static IP was used for local testing purposes.
+    // $ip = '223.123.6.236';
 
-       
+    // Dynamically get the visitor IP address.
+    $ip = $request->ip();
         $location = Location::get($ip);
-
-      
         $agent = new Agent();
          if (!$ip) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Unable to detect visitor Ip'
                 ], 400);
-            }
-
+         }
         return response()->json([
             'message' => 'Read Data Successfully',
             'success' => true,
