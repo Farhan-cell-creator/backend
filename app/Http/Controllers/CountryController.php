@@ -31,7 +31,7 @@ class CountryController extends Controller
 
         $result = $response->json();
 
-        // Countries get karo
+        // Countries get 
         $countries = $result['data']['objects'] ?? [];
 
         if (empty($countries)) {
