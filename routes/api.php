@@ -10,6 +10,7 @@ use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\EagerController;
 use App\Http\Controllers\KeyController;
+use App\Http\Controllers\ArrayController;
 
 use Jenssegers\Agent\Facades\Agent;
 
@@ -38,3 +39,4 @@ Route::get('/company', [EagerController::class, 'show']);
 
 // route for VerifyApiKey middleware
 Route::get('/key',[KeyController::class,'authenticate'])->middleware('key');
+Route::get('/array',[ArrayController::class,'arrayPractice']);
