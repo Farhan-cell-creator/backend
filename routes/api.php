@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\EmployeesController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CountryController;
@@ -9,6 +9,7 @@ use Stevebauman\Location\Facades\Location;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\EagerController;
+use App\Http\Controllers\KeyController;
 
 use Jenssegers\Agent\Facades\Agent;
 
@@ -23,10 +24,10 @@ Route::prefix('user')->group(function () {
 
 });
 // Employee Api EndPoint
-Route::prefix('employee')->group(function () {
-    Route::get('/all', [EmployeeController::class, 'getAllEmployee']);
-    Route::get('/id', [EmployeeController::class, 'getEmployeeById']);
-    Route::delete('/delete', [EmployeeController::class, 'deleteEmployeeById']);
+Route::prefix('employee')->middleware('key')->group(function () {
+    Route::get('/all', [EmployeesController::class, 'getAllEmployee']);
+    Route::get('/id', [EmployeesController::class, 'getEmployeeById']);
+    Route::delete('/delete', [EmployeesController::class, 'deleteEmployeeById']);
 });
 
 
@@ -34,3 +35,6 @@ Route::get('/country',[CountryController::class,'getCountry']);
 Route::get('/visitor-details', [VisitorController::class, 'details']);
 Route::get('/pdf', [PdfController::class, 'generate']);
 Route::get('/company', [EagerController::class, 'show']);
+
+// route for VerifyApiKey middleware
+Route::get('/key',[KeyController::class,'authenticate'])->middleware('key');

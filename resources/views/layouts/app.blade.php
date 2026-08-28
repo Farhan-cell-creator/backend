@@ -105,6 +105,10 @@
            class="list-group-item list-group-item-action bg-dark text-white">
             Analytics
         </a>
+          <a href="{{ route('credential.index') }}"
+           class="list-group-item list-group-item-action bg-dark text-white">
+            Credential
+        </a>
 
     @elseif(auth()->user()->hasRole('company_user'))
          <div class="p-3">

@@ -5,6 +5,8 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CredentialController;
+
 
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
@@ -70,5 +72,14 @@ Route::prefix('task')->middleware('auth')->group(function () {
 
     // Delete Task
     Route::delete('/delete', [TaskController::class, 'deleteTask'])->middleware('permission:task-delete')->name('task.delete');
+
+});
+Route::prefix('/credential')->middleware(['auth', 'role:super_admin'])->group(function(){
+Route::get('/',[CredentialController::class,'index'])->name('credential.index');
+Route::post('/create',[CredentialController::class ,"create"])->name('credential.create');
+Route::get('/read', [CredentialController::class, 'read'])->name('credential.read');
+Route::get('/edit/{id}', [CredentialController::class, 'edit'])->name('credential.edit');
+Route::put('/update/{id}', [CredentialController::class, 'update'])->name('credential.update');
+Route::delete('/delete', [CredentialController::class, 'delete'])->name('credential.delete');
 
 });
